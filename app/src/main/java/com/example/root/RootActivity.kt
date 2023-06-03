@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.example.rick_and_morty_main_page.ui.RickAndMortyFragment
 import com.example.rickandmorty.R
 
 class RootActivity : AppCompatActivity() {
@@ -12,7 +13,8 @@ class RootActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_page)
-//        replace(fragment, R.id.fragmentContainer)
+        val fragment = RickAndMortyFragment()
+        replace(fragment, R.id.fragmentContainer)
     }
 
     private fun replace(fragment: Fragment, id: Int) {

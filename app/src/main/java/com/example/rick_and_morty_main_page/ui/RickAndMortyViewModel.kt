@@ -14,18 +14,19 @@ class RickAndMortyViewModel(
     private val interactor: RickAndMortyInteractor
 ) : ViewModel() {
 
+
     private val _rickAndMortyData = MutableStateFlow<List<ResultsList?>?>(null)
     val rickAndMortyData = _rickAndMortyData.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-
-    fun getRickAndMortyData(characters: String) {
+    fun getRickAndMortyData(page: Int) {
         viewModelScope.launch {
             try {
                 _isLoading.value = true
-                val currencyInfoData = interactor.getCurrencyInfoData(characters)
+                val currencyInfoData = interactor.getCurrencyInfoData(page)
+                Timber.d("VIEWMODEL DATA ==========  $currencyInfoData")
                 _rickAndMortyData.emit(currencyInfoData)
             } catch (t: Throwable) {
                 Timber.e(t.message)
