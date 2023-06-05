@@ -7,4 +7,6 @@
     <string name="name">Name: </string>
     <string name="previous_page">Previous Page</string>
     <string name="next_page">Next Page</string>
+    <string name="_1">1</string>
+    <string name="choose_page">Choose page</string>
 </resources>

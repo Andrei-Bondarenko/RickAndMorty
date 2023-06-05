@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.doOnAttach
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.common.mvvm.BaseFragment
 import com.example.rick_and_morty_main_page.ui.adapter.RickAndMortyAdapter
@@ -61,6 +63,16 @@ class RickAndMortyFragment : BaseFragment(R.layout.fragment_rick_and_morty_main_
             recyclerView.setHasFixedSize(true)
             recyclerView.adapter = adapter
             adapter.onAttachedToRecyclerView(recyclerView)
+
+            pageEditText.doAfterTextChanged {
+                if (pageEditText.text.toString().isNotEmpty()) {
+                    if (pageEditText.text.toString().toInt() in 1..42) {
+                        page = pageEditText.text.toString().toInt()
+                        viewModel.getRickAndMortyData(page)
+                    }
+                }
+            }
+
             buttonNextPage.setOnClickListener {
                 if (page == 42) Toast.makeText(
                     context,
@@ -70,6 +82,7 @@ class RickAndMortyFragment : BaseFragment(R.layout.fragment_rick_and_morty_main_
                 else {
                     page++
                     viewModel.getRickAndMortyData(page)
+                    pageEditText.setText("$page", TextView.BufferType.EDITABLE)
                 }
             }
             buttonPreviousPage.setOnClickListener {
@@ -81,6 +94,7 @@ class RickAndMortyFragment : BaseFragment(R.layout.fragment_rick_and_morty_main_
                 else {
                     page--
                     viewModel.getRickAndMortyData(page)
+                    pageEditText.setText("$page", TextView.BufferType.EDITABLE)
                 }
             }
         }

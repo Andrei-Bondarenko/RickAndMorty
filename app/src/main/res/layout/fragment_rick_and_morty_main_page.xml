@@ -6,6 +6,30 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/pageInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_item_character"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/pageEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_item_character"
+            android:hint="@string/choose_page"
+            android:inputType="number"
+            android:text="@string/_1"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="30sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -17,7 +41,7 @@
         app:layout_constraintBottom_toTopOf="@id/buttonNextPage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pageInputLayout"
         tools:itemCount="3"
         tools:listitem="@layout/item_rick_and_morty_character" />
 
