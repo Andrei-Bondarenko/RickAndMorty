@@ -16,6 +16,11 @@ import timber.log.Timber
 abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
     private var rootView: View? = null
 
+    abstract fun initViews(view: View)
+
+    abstract fun bind()
+
+
     override fun onStart() {
         super.onStart()
         Timber.d("=== onStart ${javaClass.name} ===")
@@ -29,6 +34,10 @@ abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        initViews(view)
+        bind()
+
         rootView?.let { super.onViewCreated(it, savedInstanceState) }
         rootView = view
     }

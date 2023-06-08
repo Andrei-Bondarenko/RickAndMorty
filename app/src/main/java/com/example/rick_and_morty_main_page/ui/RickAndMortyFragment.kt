@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.view.doOnAttach
 import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.common.mvvm.BaseFragment
+import com.example.detailed_page.ui.DetailedFragment
 import com.example.rick_and_morty_main_page.ui.adapter.RickAndMortyAdapter
 import com.example.rickandmorty.R
 import com.example.rickandmorty.databinding.FragmentRickAndMortyMainPageBinding
+import com.example.utils.extentions.replaceScreen
+import com.example.utils.ui.EndlessScrollListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -21,14 +20,24 @@ class RickAndMortyFragment : BaseFragment(R.layout.fragment_rick_and_morty_main_
 
     private val viewModel: RickAndMortyViewModel by viewModel()
     private lateinit var binding: FragmentRickAndMortyMainPageBinding
-    private var page = 1
 
-    private val adapter: RickAndMortyAdapter = RickAndMortyAdapter()
+    private val adapter: RickAndMortyAdapter by lazy {
+        RickAndMortyAdapter { item ->
+            replaceScreen(DetailedFragment.newInstance(item))
+            print(item)
+        }
+    }
 
     private val layoutManager: LinearLayoutManager by lazy {
         LinearLayoutManager(context)
     }
 
+    private val scrollListener: EndlessScrollListener by lazy {
+        EndlessScrollListener(layoutManager) { _, page ->
+            viewModel.setCurrentPage(page)
+            viewModel.getRickAndMortyData()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,17 +48,8 @@ class RickAndMortyFragment : BaseFragment(R.layout.fragment_rick_and_morty_main_
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        with(binding) {
-
-            binding.recyclerView.doOnAttach {
-                binding.recyclerView.layoutManager = layoutManager
-            }
-
-            viewModel.getRickAndMortyData(page)
-
+    override fun bind() {
+        with(viewModel) {
 
             observe(viewModel.rickAndMortyData) { rickAndMortyData ->
                 rickAndMortyData?.let { adapter.setData(it) }
@@ -57,46 +57,27 @@ class RickAndMortyFragment : BaseFragment(R.layout.fragment_rick_and_morty_main_
             }
 
             observe(viewModel.isLoading) { isLoading ->
-                progressBar.isVisible = isLoading
+                binding.progressBar.isVisible = isLoading
             }
 
+            observe(pagingState) { pagingState ->
+                adapter.setPagingState(pagingState)
+            }
+
+            observe(isResetScrollListener) { isReset ->
+                if (isReset) scrollListener.reset()
+            }
+        }
+    }
+
+
+    override fun initViews(view: View) {
+        with(binding) {
+            recyclerView.layoutManager = layoutManager
             recyclerView.setHasFixedSize(true)
             recyclerView.adapter = adapter
             adapter.onAttachedToRecyclerView(recyclerView)
-
-            pageEditText.doAfterTextChanged {
-                if (pageEditText.text.toString().isNotEmpty()) {
-                    if (pageEditText.text.toString().toInt() in 1..42) {
-                        page = pageEditText.text.toString().toInt()
-                        viewModel.getRickAndMortyData(page)
-                    }
-                }
-            }
-
-            buttonNextPage.setOnClickListener {
-                if (page == 42) Toast.makeText(
-                    context,
-                    "You are on the last page",
-                    Toast.LENGTH_SHORT
-                ).show()
-                else {
-                    page++
-                    viewModel.getRickAndMortyData(page)
-                    pageEditText.setText("$page", TextView.BufferType.EDITABLE)
-                }
-            }
-            buttonPreviousPage.setOnClickListener {
-                if (page == 1) Toast.makeText(
-                    context,
-                    "You are on the first page",
-                    Toast.LENGTH_SHORT
-                ).show()
-                else {
-                    page--
-                    viewModel.getRickAndMortyData(page)
-                    pageEditText.setText("$page", TextView.BufferType.EDITABLE)
-                }
-            }
+            recyclerView.addOnScrollListener(scrollListener)
         }
     }
 

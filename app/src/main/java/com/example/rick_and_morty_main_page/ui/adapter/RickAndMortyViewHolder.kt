@@ -11,26 +11,28 @@ import com.example.rickandmorty.databinding.ItemRickAndMortyCharacterBinding
 
 class RickAndMortyViewHolder(
     private val binding: ItemRickAndMortyCharacterBinding,
+    private val clickOnItem: (ResultsList?) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
-    constructor(parent: ViewGroup) : this(
-        ItemRickAndMortyCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    constructor(
+        parent: ViewGroup, onClickItem: (ResultsList?) -> Unit
+    ) : this(
+    ItemRickAndMortyCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+    onClickItem
     )
 
     fun onBind(item: ResultsList?) {
-
-        val description = item?.name
-
         with(binding) {
             nameTextView.text = item?.name
-            statusTextView.text = item?.status
-            speciesTextView.text = item?.species
-            genderTextView.text = item?.gender
-            locationTextView.text = item?.location?.name
+            idTextView.text = item?.id?.toString()
             imageViewIconItem.load(item?.image) {
                 crossfade(true)
                 placeholder(R.drawable.reload_image)
                 transformations(CircleCropTransformation())
             }
         }
+    itemView.setOnClickListener {
+        clickOnItem(item)
     }
+    }
+
 }
