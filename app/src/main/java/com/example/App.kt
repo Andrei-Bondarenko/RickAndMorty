@@ -3,6 +3,7 @@ package com.example
 import android.app.Application
 import com.example.common.NetworkModule
 import com.example.rick_and_morty_main_page.di.RickAndMortyModule
+import com.example.search_page.di.SearchModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext
 import timber.log.Timber
@@ -26,7 +27,8 @@ class App : Application() {
             modules(
                 listOf(
                     NetworkModule.create(),
-                    RickAndMortyModule.create()
+                    RickAndMortyModule.create(),
+                    SearchModule.create()
                 )
             )
         }

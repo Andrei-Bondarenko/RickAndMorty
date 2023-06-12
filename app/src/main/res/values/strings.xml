@@ -11,4 +11,6 @@
     <string name="choose_page">Choose page</string>
     <string name="id">Id: </string>
     <string name="retry">Retry</string>
+    <string name="search">Search</string>
+    <string name="searching_characters">Searching Characters</string>
 </resources>

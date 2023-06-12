@@ -4,9 +4,9 @@ import com.example.rick_and_morty_main_page.model.ResultsList
 import com.example.rick_and_morty_main_page.repository.RickAndMortyRepository
 
 class RickAndMortyInteractor (
-    private val RickAndMortyRepository: RickAndMortyRepository,
+    private val rickAndMortyRepository: RickAndMortyRepository,
 ) {
-    suspend fun getCurrencyInfoData(page: Int): List<ResultsList?>? {
-        return RickAndMortyRepository.getRickAndMortyData(page)
+    suspend fun getRickAndMortyData(page: Int): List<ResultsList?> {
+        return rickAndMortyRepository.getRickAndMortyData(page)
     }
 }

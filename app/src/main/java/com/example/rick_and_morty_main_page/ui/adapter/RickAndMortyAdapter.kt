@@ -62,6 +62,7 @@ class RickAndMortyAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(items: List<ResultsList?>) {
+        data.clear()
         data.addAll(items)
         notifyDataSetChanged()
     }

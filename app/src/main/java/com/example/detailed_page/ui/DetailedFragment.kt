@@ -11,6 +11,7 @@ import com.example.rickandmorty.R
 import com.example.rickandmorty.databinding.FragmentDetailedPageBinding
 import com.example.utils.Arguments
 import com.example.utils.extentions.args
+import com.example.utils.extentions.popScreen
 import com.example.utils.withArgs
 
 class DetailedFragment: BaseFragment(R.layout.fragment_detailed_page) {
@@ -42,6 +43,11 @@ class DetailedFragment: BaseFragment(R.layout.fragment_detailed_page) {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
+
+            toolBarDetailPageTitle.setNavigationOnClickListener {
+                popScreen()
+            }
+
             nameTextView.text = itemData?.name
             statusTextView.text = itemData?.status
             genderTextView.text = itemData?.gender

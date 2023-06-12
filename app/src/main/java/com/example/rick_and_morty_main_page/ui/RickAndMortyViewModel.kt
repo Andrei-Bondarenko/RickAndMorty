@@ -18,7 +18,7 @@ class RickAndMortyViewModel(
     private var pagingJob: Job? = null
     private var paginationEnded: Boolean = false
 
-    private val _rickAndMortyData = MutableStateFlow<List<ResultsList?>?>(null)
+    private val _rickAndMortyData = MutableStateFlow<List<ResultsList?>>(mutableListOf())
     val rickAndMortyData = _rickAndMortyData.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
@@ -37,23 +37,24 @@ class RickAndMortyViewModel(
     }
 
     fun getRickAndMortyData() {
-        paginationEnded = false
-        _isResetScrollListener.value = true
-        _pagingState.value = PagingState.InitialLoading
+        if (paginationEnded) return
+        _pagingState.value = PagingState.Loading
         pagingJob?.cancel()
         pagingJob = launch {
             try {
                 _isLoading.value = true
-                val characterData = interactor.getCurrencyInfoData(_page.value)
+                val characterData = interactor.getRickAndMortyData(_page.value)
                 Timber.d("VIEWMODEL DATA ==========  $characterData")
-                _rickAndMortyData.value = characterData
-                _pagingState.value = PagingState.Idle
+                val list = _rickAndMortyData.value.toMutableList()
+                list.addAll(characterData)
+                _rickAndMortyData.value = list
             } catch (e: CancellationException) {
                 Timber.e(e.message)
             } catch (t: Throwable) {
                 Timber.e(t.message)
             } finally {
                 _isLoading.value = false
+                _pagingState.value = PagingState.Idle
             }
         }
     }

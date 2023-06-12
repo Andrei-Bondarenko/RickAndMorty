@@ -1,9 +1,6 @@
 package com.example.utils.extentions
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
+import androidx.fragment.app.*
 import androidx.lifecycle.Lifecycle
 import com.example.rickandmorty.R
 
@@ -12,21 +9,30 @@ private var backPressedTime = 0L
 private const val minBackPressedTime = 2000
 private const val minBackStackEntryCount = 2
 
-fun Fragment.replace(fragment: Fragment, id:Int) {
+fun Fragment.replace(fragment: Fragment, id: Int) {
     val fragmentManager = requireActivity().supportFragmentManager
     val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
     fragmentTransaction.addToBackStack(null)
         .replace(id, fragment)
         .commit()
 }
+
 fun Fragment.popScreen() {
     requireActivity().hideKeyboard()
 
     val fragmentManager = parentFragment?.childFragmentManager ?: childFragmentManager
     if (fragmentManager.backStackEntryCount < minBackStackEntryCount) {
-//        requireActivity().popFeature()
+        requireActivity().popFeature()
     } else {
         whenStateAtLeast(Lifecycle.State.STARTED) { fragmentManager.popBackStack() }
+    }
+}
+
+fun FragmentActivity.popFeature() {
+    if (supportFragmentManager.backStackEntryCount < 2) {
+        finish()
+    } else {
+        whenStateAtLeast(Lifecycle.State.STARTED) { supportFragmentManager.popBackStack() }
     }
 }
 

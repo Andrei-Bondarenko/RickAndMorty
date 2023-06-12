@@ -5,7 +5,7 @@ import com.example.rick_and_morty_main_page.api.model.OriginDataResponse
 import com.example.rick_and_morty_main_page.api.model.ResultsListResponse
 
 object RickAndMortyConverter {
-    fun fromNetwork(response: List<ResultsListResponse?>?): List<ResultsList?>? {
+    fun fromNetwork(response: List<ResultsListResponse?>?): List<ResultsList?> {
         return response?.map { data ->
             ResultsList(
                 id = data?.id,
@@ -19,7 +19,7 @@ object RickAndMortyConverter {
                 image = data?.image,
                 episode = data?.episode
             )
-        }
+        }?: emptyList()
     }
 
     private fun fromNetwork(response: OriginDataResponse?): OriginData? =

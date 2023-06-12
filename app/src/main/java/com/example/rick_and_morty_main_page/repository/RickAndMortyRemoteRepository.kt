@@ -9,8 +9,7 @@ class RickAndMortyRemoteRepository (
     private val api: RickAndMortyApi
 ): RickAndMortyRepository {
 
-
-    override suspend fun getRickAndMortyData(page: Int): List<ResultsList?>? {
+    override suspend fun getRickAndMortyData(page: Int): List<ResultsList?> {
         val rickAndMortyData = api.getRickAndMortyData(page)
         Timber.d("RICK AND MORTY DATA  ===== $rickAndMortyData")
         return RickAndMortyConverter.fromNetwork(rickAndMortyData?.results)

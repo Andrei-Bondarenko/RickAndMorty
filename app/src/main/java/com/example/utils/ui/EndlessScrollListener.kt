@@ -13,7 +13,7 @@ class EndlessScrollListener(
     private var isLoading = true
     private var totalLoadedItems = 0
 
-    private var currentPage = 0
+    private var currentPage = 1
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
