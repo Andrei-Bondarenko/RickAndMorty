@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.doOnAttach
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.common.mvvm.BaseFragment
@@ -16,7 +15,6 @@ import com.example.search_page.ui.SearchFragment
 import com.example.utils.extentions.replaceScreen
 import com.example.utils.ui.EndlessScrollListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class RickAndMortyFragment : BaseFragment(R.layout.fragment_rick_and_morty_main_page) {
 
@@ -38,6 +36,7 @@ class RickAndMortyFragment : BaseFragment(R.layout.fragment_rick_and_morty_main_
         EndlessScrollListener(layoutManager) { _, page ->
             viewModel.setCurrentPage(page)
             viewModel.getRickAndMortyData()
+            viewModel.insertDataToDb(page)
         }
     }
 
@@ -53,12 +52,16 @@ class RickAndMortyFragment : BaseFragment(R.layout.fragment_rick_and_morty_main_
     override fun bind() {
         with(viewModel) {
 
-            observe(viewModel.rickAndMortyData) { rickAndMortyData ->
-                rickAndMortyData?.let { adapter.setData(it) }
-                Timber.d("DATA =========>>>>>>>>> $rickAndMortyData")
+//            observe(viewModel.rickAndMortyData) { rickAndMortyData ->
+//                rickAndMortyData?.let { adapter.setData(it) }
+//                Timber.d("DATA =========>>>>>>>>> $rickAndMortyData")
+//            }
+
+            observe(listData) {
+                adapter.setData(it)
             }
 
-            observe(viewModel.isLoading) { isLoading ->
+            observe(isLoading) { isLoading ->
                 binding.progressBar.isVisible = isLoading
             }
 

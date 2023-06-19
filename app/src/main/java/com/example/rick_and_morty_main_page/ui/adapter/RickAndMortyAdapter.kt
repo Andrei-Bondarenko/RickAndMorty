@@ -66,10 +66,4 @@ class RickAndMortyAdapter(
         data.addAll(items)
         notifyDataSetChanged()
     }
-
-//    override fun getItemViewType(position: Int): Int = when {
-//        !stateRequiresExtraItem(pagingState) || position < itemCount - 1 -> R.layout.item_list
-//        pagingState is PagingState.Loading || pagingState is PagingState.InitialLoading -> R.layout.item_progressbar
-//        else -> R.layout.item_error
-//    }
 }
